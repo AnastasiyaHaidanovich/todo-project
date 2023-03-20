@@ -36,9 +36,8 @@
     transform: rotate(360deg);
   }
 }
-
-.header {
-  color: white;
+.site-layout-header {
+  height: 100px;
 }
 .site-layout-content {
   min-height: 280px;
@@ -54,4 +53,9 @@
 .ant-row-rtl #components-layout-demo-top .logo {
   float: right;
   margin: 16px 0 16px 24px;
+}
+.tasks-list {
+  height: 400px;
+  overflow-y: scroll;
+  margin-bottom: 20px;
 }
