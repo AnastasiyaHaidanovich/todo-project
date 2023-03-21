@@ -1,17 +1,19 @@
 import React, {useState} from 'react';
 import '../App.css';
 import {Button, Input, List, Space, Switch, Typography} from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 import {DateTime} from "ts-luxon";
-import  {tasksList} from './tasksList';
 import {TaskItem} from "../models";
 
 export function AddTaskForm () {
-    const [state, setState] = useState({task:"", date:"", done: false});
-    // const [done, setDone] = useState(false);
+    const [state, setState] = useState({key: 0, task:"", date:"", done: false});
+    const [taskKey, setTaskKey] = useState(0);
+    const [tasksList, setTasksList] = useState(Array());
 
     function handleSubmit (e: React.FormEvent<HTMLAnchorElement | HTMLButtonElement> | React.FormEvent<HTMLButtonElement>) {
-        tasksList.push(state)
-        setState({task:"", date:"", done: false})
+        setTaskKey(taskKey + 1);
+        tasksList.push(state);
+        setState({key: 0, task:"", date:"", done: false})
     }
     let counter : number = 1;
 
@@ -27,14 +29,9 @@ export function AddTaskForm () {
                           style={{ width: '100%', display: "flex", justifyContent: "space-between" }}
                           extra={<>
                               <p>{ item.date }</p>
-                              <Switch
-                                  checked={item.done}
-                                  checkedChildren="Done"
-                                  unCheckedChildren="Planned"
-                                  onChange={() => {
-                                      item.done= !item.done;
-                                  }}
-                              />
+                              <Button type="primary" shape="circle" icon={<DeleteOutlined />} onClick={()=> {
+                                  setTasksList(tasksList.filter(obj => obj.key !== item.key))
+                              }}/>
                           </>}
                       >
                           <Typography.Text style={{ width: '50%' }}>{ counter++ } { item.task }</Typography.Text>
@@ -42,7 +39,7 @@ export function AddTaskForm () {
                   )}
             />
             <Space.Compact style={{ width: '100%' }} >
-                <Input  type="text" value={state.task} onChange={(e) => setState({task: e.target.value, date: DateTime.now().toLocaleString({day: 'numeric', month: 'long'}), done: false})} />
+                <Input  type="text" value={state.task} onChange={(e) => setState({key: taskKey, task: e.target.value, date: DateTime.now().toLocaleString({day: 'numeric', month: 'long'}), done: false})} />
                 <Button type="primary" disabled={state.task.trim() === ""} onClick={(e) => handleSubmit(e)}>Добавить</Button>
             </Space.Compact>
         </>
